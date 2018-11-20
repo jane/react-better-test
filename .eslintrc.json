@@ -9,5 +9,10 @@
   ],
   "plugins": [
     "jane"
-  ]
+  ],
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  }
 }

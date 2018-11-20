@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`styled theme support works with render: styled.render 1`] = `
+<div
+  class=""
+>
+  Data is: Hello
+</div>
+`;
