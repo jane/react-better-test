@@ -1,7 +1,7 @@
 # react-better-test
 
 Better React test utils
-[![npm version](https://img.shields.io/npm/v/react-better-test.svg)](https://npm.im/react-better-test) [![CircleCI](https://circleci.com/gh/jane/react-better-test.svg?style=svg)](https://circleci.com/gh/jane/react-better-test)
+[![npm version](https://img.shields.io/npm/v/react-better-test.svg)](https://npm.im/react-better-test) [![CircleCI](https://circleci.com/gh/jane/react-better-test.svg?style=svg)](https://circleci.com/gh/jane/react-better-test) [![Coverage Status](https://coveralls.io/repos/github/jane/react-better-test/badge.svg?t=fFbtGF)](https://coveralls.io/github/jane/react-better-test)
 
 --------
 
@@ -16,10 +16,6 @@ Better React test utils
 * Usage docs
 * Flow type the actual thing
 * Fix skipped tests
-* Set up code coverage, and reporting
-* Set up CI and stuff
-* Snyk I guess
-* Badges, everyone likes badges
 
 ## License
 
