@@ -11,10 +11,23 @@ Better React test utils
 
 ## Usage
 
+```javascript
+import renderer from 'react-better-test'
+import 'jest-styled-components'
+import Adapter from 'enzyme-adapter-react-16'
+import enzyme from 'enzyme'
+enzyme.configure({ adapter: new Adapter() })
+
+// ...
+expect(renderer.create(<Foo />)).toMatchSnapshot()
+expect(renderer.mount(<SomeStyledComponent />)).toHaveStyleRule('color', 'blue')
+```
+
+See the tests for full usage examples.
+
 ### TODO:
 
-* Usage docs
-* Flow type the actual thing
+* Finish Flow
 * Fix skipped tests
 
 ## License
