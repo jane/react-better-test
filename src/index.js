@@ -10,96 +10,67 @@ import {
   shallow as shallowEnzyme,
 } from 'enzyme'
 
-const theme = {}
-
 class TestRenderer {
-  theme = null
-  Router = null
-  store = null
-
-  withTheme(newTheme = theme) {
-    this.theme = newTheme
-    return this
+  constructor({ theme = {}, router = MemoryRouter, store = {} }) {
+    this.theme = theme
+    this.Router = router
+    this.store = createStore(() => store)
   }
 
-  withRouter(Router = MemoryRouter) {
-    this.Router = Router
-    return this
-  }
-
-  withStore(store) {
-    this.store = store
-    return this
-  }
-
-  withStoreData(data = {}) {
-    return this.withStore(createStore(() => data))
-  }
-
-  _addRouter(C) {
+  _addRouter = (C) => {
     if (this.Router) {
       return <this.Router>{this._addStore(C)}</this.Router>
     }
     return this._addStore(C)
   }
 
-  _addStore(C) {
+  _addStore = (C) => {
     if (this.store) {
       return <Provider store={this.store}>{C}</Provider>
     }
     return C
   }
 
-  _getStore() {
+  _getStore = () => {
     if (this.store) {
       return { store: this.store }
     }
     return {}
   }
 
-  _getTheme() {
+  _getTheme = () => {
     const context = shallowEnzyme(<ThemeProvider theme={this.theme} />)
       .instance()
       .getChildContext()
     return context
   }
 
-  create(C) {
-    return renderer
+  create = (C) =>
+    renderer
       .create(
         <ThemeProvider theme={this.theme}>{this._addRouter(C)}</ThemeProvider>
       )
       .toJSON()
-  }
 
-  mount(C, options = {}) {
-    return mountEnzyme(
+  mount = (C, options = {}) =>
+    mountEnzyme(
       <ThemeProvider theme={this.theme}>{this._addRouter(C)}</ThemeProvider>,
       options
     )
-  }
 
-  render(C) {
-    return renderEnzyme(
+  render = (C) =>
+    renderEnzyme(
       <ThemeProvider theme={this.theme}>{this._addRouter(C)}</ThemeProvider>
     )
-  }
 
-  shallow(C) {
-    return shallowEnzyme(this.Router ? <this.Router>{C}</this.Router> : C, {
+  shallow = (C) =>
+    shallowEnzyme(this.Router ? <this.Router>{C}</this.Router> : C, {
       context: {
         ...this._getTheme(),
         ...this._getStore(),
       },
     })
-  }
 }
 
-const aRenderer = () => new TestRenderer().withTheme(theme)
-
-export const create = (C) => aRenderer().create(C)
-export const mount = (...params) => aRenderer().mount(...params)
-export const render = (C) => aRenderer().render(C)
-export const shallow = (C) => aRenderer().shallow(C)
-
-export default aRenderer
+const r = (props = {}) => new TestRenderer(props)
+export default r

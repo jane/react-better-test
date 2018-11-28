@@ -3,9 +3,9 @@
 import * as React from 'react'
 import 'jest-styled-components'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, HashRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import renderer, { create, mount, render, shallow } from '.'
+import renderer from '.'
 import Adapter from 'enzyme-adapter-react-16'
 import enzyme from 'enzyme'
 enzyme.configure({ adapter: new Adapter() })
@@ -18,6 +18,10 @@ const Sample = ({ data, dispatch, ...rest }) => (
 )
 
 describe('styled theme support', (): void => {
+  const mount = renderer().mount
+  const shallow = renderer().shallow
+  const render = renderer().render
+  const create = renderer().create
   const StyledSample = styled(Sample)`
     color: ${({ theme }: { theme: typeof theme }) => theme.foo};
   `
@@ -44,7 +48,7 @@ describe('styled theme support', (): void => {
 })
 
 describe('supports router', (): void => {
-  const render = renderer().withRouter()
+  const render = renderer({ router: HashRouter })
 
   // these would fail without router
   it('works with mount', (): void => {
@@ -65,7 +69,7 @@ describe('supports router', (): void => {
 })
 
 describe('supports Redux store data', (): void => {
-  const render = renderer().withStoreData()
+  const render = renderer({ store: {} })
 
   const ConnectedSample = connect(
     () => ({ data: 'Cool!', dispatch: 'hi' }),
@@ -79,7 +83,13 @@ describe('supports Redux store data', (): void => {
 
   it('works with shallow', (): void => {
     const component = render.shallow(<ConnectedSample />)
-    expect(component.dive().text()).toEqual('Data is: Cool!')
+    expect(
+      component
+        .dive()
+        .dive()
+        .dive()
+        .text()
+    ).toEqual('Data is: Cool!')
   })
 
   it('works with render', (): void => {
@@ -90,33 +100,5 @@ describe('supports Redux store data', (): void => {
   it('works with create', (): void => {
     const component = render.create(<ConnectedSample />)
     expect(component.children).toEqual(expect.arrayContaining(['Cool!']))
-  })
-})
-
-describe('supports populated Redux store data', (): void => {
-  const render = renderer().withStoreData({ data: 'Magic!' })
-  const ConnectedSample = connect(
-    ({ data }: { data: string }) => ({ data }),
-    null
-  )(Sample)
-
-  it('works with mount', (): void => {
-    const component = render.mount(<ConnectedSample />)
-    expect(component.text()).toEqual('Data is: Magic!')
-  })
-
-  it('works with shallow', (): void => {
-    const component = render.shallow(<ConnectedSample />)
-    expect(component.dive().text()).toEqual('Data is: Magic!')
-  })
-
-  it('works with render', (): void => {
-    const component = render.render(<ConnectedSample />)
-    expect(component.text()).toEqual('Data is: Magic!')
-  })
-
-  it('works with create', (): void => {
-    const component = render.create(<ConnectedSample />)
-    expect(component.children).toEqual(expect.arrayContaining(['Magic!']))
   })
 })
